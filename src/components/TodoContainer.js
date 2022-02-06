@@ -1,6 +1,8 @@
 import React from "react";
+import {v4 as uuidv4} from "uuid";
 import Header from "./Header";
 import TodoList from "./TodoList";
+import InputTodo from "./InputTodo";
 class TodoContainer extends React.Component {
     state = {
         todos: [
@@ -49,10 +51,22 @@ class TodoContainer extends React.Component {
             }
         });
     };
+    handleAdd = (title) => {
+        console.log("handleAdd: " + title);
+        const t = {
+            id: uuidv4(),
+            title: title,
+            completed: false
+        };
+        this.setState({
+            todos: [...this.state.todos, t]
+        });
+    };
     render() {
         return (
             <div>
-                <Header></Header>
+                <Header />
+                <InputTodo handleAddProps={this.handleAdd} />
                 <TodoList 
                     todos={this.state.todos} 
                     handleChangeProps={this.handleChange} 
