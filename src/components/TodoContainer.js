@@ -51,6 +51,22 @@ class TodoContainer extends React.Component {
             }
         });
     };
+    handleUpdate = (id, title) => {
+        console.log('handleUpdate: ' + id + ', title: ' + title);
+        this.setState(preState => {
+            return {
+                todos: preState.todos.map(todo => {
+                    if (todo.id === id) {
+                        return {
+                            ...todo,
+                            title: title,
+                        }
+                    }
+                    return todo;
+                })
+            };
+        });
+    };
     handleAdd = (title) => {
         console.log("handleAdd: " + title);
         const t = {
@@ -72,6 +88,7 @@ class TodoContainer extends React.Component {
                         todos={this.state.todos} 
                         handleChangeProps={this.handleChange} 
                         handleDeleteProps={this.handleDelete}
+                        handleUpdateProps={this.handleUpdate}
                     />
                 </div>
             </div>
