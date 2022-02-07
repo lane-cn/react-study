@@ -1,42 +1,44 @@
-import React from "react";
-class InputTodo extends React.Component {
-    state = {
+import React, {useState} from "react";
+
+const InputTodo = (props) => {
+    const [inputText, setInputText] = useState({
         title: ""
-    };
-    onChange = (e) => {
-        //console.log("onChange: " + [e.target.name] + " = " + [e.target.value]);
-        this.setState(preState => {
+    });
+    
+    const onChange = (e) => {
+        setInputText(preState => {
             return {
+                ...preState,
                 [e.target.name]: e.target.value
-            }
+            };
         });
     };
-    handleSubmit = (e) => {
+
+    const handleSubmit = (e) => {
         e.preventDefault();
-        //console.log(this.state.title);
-        if (this.state.title.trim()) {
-            this.props.handleAddProps(this.state.title)
-            this.setState({
+        if (inputText.title.trim()) {
+            props.handleAddProps(inputText.title);
+            setInputText({
                 title: ""
             });
         } else {
             alert('Please input text');
         }
     };
-    render() {
-        return (
-            <form onSubmit={this.handleSubmit} className="form-container">
-                <input 
-                    name="title"
-                    type="text" 
-                    placeholder="Add todo ..." 
-                    value={this.state.title} 
-                    onChange={this.onChange}
-                    className="input-text"
-                />
-                <button className="input-submit">Submit</button>
-            </form>
-        )
-    }
+
+    return (
+        <form onSubmit={handleSubmit} className="form-container">
+            <input 
+                name="title"
+                type="text" 
+                placeholder="Add todo ..." 
+                className="input-text"
+                value={inputText.title}
+                onChange={onChange}
+            />
+            <button className="input-submit">Submit</button>
+        </form>
+    )
 }
+
 export default InputTodo
