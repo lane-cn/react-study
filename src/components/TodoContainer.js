@@ -5,23 +5,7 @@ import TodoList from "./TodoList";
 import InputTodo from "./InputTodo";
 class TodoContainer extends React.Component {
     state = {
-        todos: [
-            {
-                id: 1,
-                title: "Setup development environment",
-                completed: true
-            },
-            {
-                id: 2,
-                title: "Develop website and add content",
-                completed: false
-            },
-            {
-                id: 3,
-                title: "Deploy a live site",
-                completed: false
-            }
-        ]
+        todos: []
     };
     handleChange = (id) => {
         console.log('handleChange: ' + id);
@@ -93,6 +77,30 @@ class TodoContainer extends React.Component {
                 </div>
             </div>
         )
+    };
+    componentDidMount() {
+        console.log('TodoContainer componentDidMount');
+        const json = localStorage.getItem("todos");
+        const ts = JSON.parse(json);
+        if (ts) {
+            this.setState({todos: ts});
+            console.log("load from localstorage: " + ts);
+        } else {
+            fetch("https://jsonplaceholder.typicode.com/todos?_limit=10").then(response => response.json()).then(data => {
+                this.setState({todos: data});
+                console.log("load from json placeholder: " + data);
+            });
+        }
+    }
+    componentDidUpdate(preProps, preState) {
+        console.log('TodoContainer componentDidUpdate');
+        if (preState.todos != this.state.todos) {
+            const json = JSON.stringify(this.state.todos);
+            localStorage.setItem("todos", json);
+        }
+    }
+    componentWillUnmount() {
+        console.log('TodoContainer componentWillUnmount');
     }
 }
 export default TodoContainer
