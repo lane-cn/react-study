@@ -71,5 +71,8 @@ class TodoItem extends React.Component {
             </li>
         )
     }
+    componentWillUnmount() {
+        console.log('TodoItem componentWillUnmount');
+    }
 }
 export default TodoItem
