@@ -1,78 +1,80 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import styles from "./TodoItem.module.css";
-class TodoItem extends React.Component {
-    state = {
-        editing: false
-    };
-    handleEditing = (id) => {
+
+const TodoItem = (props) => {
+    const [editing, setEditing] = useState(false);
+
+    const handleEditing = (id) => {
         console.log("handleEditing: " + id)
-        this.setState({
-            editing: true
-        });
+        setEditing(true);
     };
-    onChange = (e) => {
-        var id = this.props.todo.id;
-        var title = e.target.value;
-        console.log("onChange: " + e.target.value + ", id: " + id);
-        this.props.handleUpdateProps(id, title);
+
+    const onChange = (e) => {
+        var key = props.todo.id;
+        var value = e.target.value;
+        console.log("onChange: " + value + ", id: " + key);
+        props.handleUpdateProps(key, value);
     };
-    handleUpdateDone = (e) => {
+
+    const handleUpdateDone = (e) => {
         if (e.key === 'Enter') {
             console.log('key down: ' + e.key);
-            this.setState({
-                editing: false
-            });
+            setEditing(false);
         }
     };
-    render() {
-        const {id, title, completed} = this.props.todo;
-        const completedStyle = {
-            fontStyle: "italic",
-            color: "#595959",
-            opacity: 0.4,
-            textDecoration: "line-through",
-        };
-        
-        let viewMode = {};
-        let editMode = {};
-        if (this.state.editing) {
-            viewMode.display = "none";
-        } else {
-            editMode.display = "none";
-        }
 
-        return (
-            <li className={styles.item}>
-                <div 
-                    onDoubleClick={() => this.handleEditing(id)} 
-                    style={viewMode}
-                >
-                    <input 
-                        type="checkbox" 
-                        checked={completed} 
-                        onChange={() => this.props.handleChangeProps(id)}
-                        className={styles.checkbox}
-                    />
-                    <span style={completed ? completedStyle : null}>
-                        {title}
-                    </span>
-                    <button onClick={() => this.props.handleDeleteProps(id)}>
-                        Delete
-                    </button>
-                </div>
-                <input 
-                    type="text" 
-                    className={styles.textInput} 
-                    style={editMode} 
-                    value={title} 
-                    onChange={this.onChange}
-                    onKeyDown={this.handleUpdateDone}
-                />
-            </li>
-        )
+    const completedStyle = {
+        fontStyle: "italic",
+        color: "#595959",
+        opacity: 0.4,
+        textDecoration: "line-through",
+    };
+
+    useEffect(() => {
+        return () => {
+            console.log('TodoItem componentWillUnmount');
+        };
+    }, []);
+
+    const {id, title, completed} = props.todo;
+
+    let viewMode = {};
+    let editMode = {};
+    if (editing) {
+        viewMode.display = "none";
+    } else {
+        editMode.display = "none";
     }
-    componentWillUnmount() {
-        console.log('TodoItem componentWillUnmount');
-    }
-}
+
+    return (
+        <li className={styles.item}>
+        <div 
+            onDoubleClick={() => handleEditing(id)} 
+            style={viewMode}
+        >
+            <input 
+                type="checkbox" 
+                checked={completed} 
+                onChange={() => props.handleChangeProps(id)}
+                className={styles.checkbox}
+            />
+            <span style={completed ? completedStyle : null}>
+                {title}
+            </span>
+            <button onClick={() => props.handleDeleteProps(id)}>
+                Delete
+            </button>
+        </div>
+        <input 
+            type="text" 
+            className={styles.textInput} 
+            style={editMode} 
+            value={title} 
+            onChange={onChange}
+            onKeyDown={handleUpdateDone}
+        />
+        </li>
+    );
+};
+
 export default TodoItem
