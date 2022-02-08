@@ -5,7 +5,7 @@ const About = (props) => {
 
     return (
         <React.Fragment>
-            <div>Hello world! About: {type}</div>
+            <div className="about__content">Hello world! About: {type}</div>
         </React.Fragment>
     );
 };
